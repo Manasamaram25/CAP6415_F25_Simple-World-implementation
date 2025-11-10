@@ -1,0 +1,56 @@
+Week 1 
+
+Project Title:
+Simple World Implementation – A Simple Vision System for the Blocks World
+
+Summary of Work:
+During the first week, I focused on setting up the foundation for the project and understanding the problem described in Chapter 2 (“A Simple Vision System”) of the textbook Foundations of Computer Vision. I created a public GitHub repository for version control, documented my progress, and reviewed the concepts behind the “Blocks World” and its simple vision model. This week mainly involved planning, research, and setup activities to prepare for the implementation phase.
+
+Detailed Activities:
+1. Repository Setup
+   - Created a public GitHub repository named `CAP6415_F25_project-SimpleWorldImplementation` under my FAU GitHub account.
+   - Initialized the repository with a README file that includes a short project description and objectives.
+   - Added this `week1log.txt` file to start documenting weekly progress.
+   - Verified that the repository is public and accessible.
+   - Repository URL: https://github.com/Manasamaram25/CAP6415_F25_Simple-World-implementation
+
+2. Understanding the Project
+   - Read and analyzed Chapter 2 of Foundations of Computer Vision (“A Simple Vision System”) to understand the theoretical background.
+   - Reviewed the concept of the Blocks World, which is a simplified 3D environment composed of colored geometric shapes resting on a white ground plane.
+   - Studied the parallel (orthographic) projection model that will be used to simulate the image formation process.
+   - Understood the goal of the system — recovering the 3D structure of the scene (world coordinates X, Y, Z) from 2D images.
+
+3. Conceptual Planning
+   - Outlined the main implementation steps:
+     - Simulate or generate the Blocks World scene.
+     - Model a simple camera using parallel projection.
+     - Extract edges from the image using gradient-based techniques.
+     - Classify edges (object boundaries, contact edges, occlusion edges).
+     - Reconstruct surfaces and approximate world coordinates.
+     - Visualize or render the 3D reconstructed scene.
+   - Decided to implement the code using python(NumPy, OpenCV, and Matplotlib for visualization).
+   - Planned to build the project gradually, verifying results at each stage (edges → surfaces → 3D reconstruction).
+
+4. Initial Research & Resources
+   - Collected online references, figures, and equations from the textbook website to understand how the final 3D reconstruction is presented.
+   - Reviewed example figures (2.5, 2.6, 2.10) to get a clear picture of the edge extraction and reconstruction results.
+   - Read about basic image gradients and edge detection (Sobel and Canny filters) to prepare for implementation in Week 2.
+
+5. Communication
+   - Sent an email to Dr. Vadzic (vadzic@fau.edu) with the GitHub repository URL as instructed.
+   - Confirmed that the repository is accessible and contains the initial setup files.
+
+Challenges:
+- The main challenge this week was familiarizing myself with the theoretical foundations of the “Simple Vision System” and ensuring I correctly understood the assumptions made in the textbook (e.g., parallel projection, no occlusions between objects).
+- Some mathematical details (e.g., deriving gradient and projection equations) will require careful implementation, which I plan to address in the coming weeks.
+
+Next Steps for Week 2:
+- Begin coding the image simulation for the Blocks World (creating simple geometric shapes in a white background).
+- Implement the basic parallel projection model.
+- Apply gradient-based edge detection to identify and visualize object boundaries.
+- Start the draft for `week2log.txt` to record implementation progress.
+
+Prepared by:
+Manasa Maram 
+Florida Atlantic University
+Date: November 9, 2025
