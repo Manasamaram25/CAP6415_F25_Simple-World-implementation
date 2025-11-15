@@ -1,0 +1,64 @@
+Week 2 (ending November 16, 2025)
+
+Summary:
+During Week 2, I started building the actual structure of the project. I created the README.md abstract, set up the folder organization for the repository, and began coding the early stages of the Simple Vision System: generating the Blocks World scene and implementing the edge extraction pipeline. This week focused on moving from theoretical understanding to concrete implementation.
+
+Detailed Activities:
+
+1. Repository Structure & Project Organization
+- Updated README.md with a clear abstract summarizing the project goal, problem, and approach.
+- Added sections to README.md for: Introduction, Method, Frameworks/Libraries, Algorithm Overview, References, and Planned Results.
+- Cited the textbook "Foundations of Computer Vision" (Torralba, Isola, Freeman) as the primary reference for the project.
+- Planned to properly attribute additional libraries (NumPy, OpenCV, Matplotlib) in the final README.
+- Created a new folder called “results/” which will store images, intermediate outputs, edge maps, gradients, and 3D reconstructions at the end of the project. For now, the folder is empty except for a placeholder README file.
+
+2. Understanding the Implementation Pipeline
+I revisited the implementation steps described in Chapter 2:
+- Blocks World objects: simple polygons representing vertical and horizontal surfaces.
+- Image formation: use an orthographic (parallel) projection model.
+- Extract edges: compute image gradients using partial derivative approximations.
+- Edge classification: object boundaries, contact edges, occlusion edges.
+- Surface reconstruction: formulate linear constraints and solve with least-squares.
+
+I broke the chapter into a practical coding plan for the coming weeks.
+
+3. Initial Code Setup
+- Created a new Python script `blocks_world.py` that generates a synthetic Blocks World image.
+- Built a simple 2D representation of the world using colored rectangles on a white ground, inspired by Figure 2.1 in the textbook.
+- Started writing functions for:
+  - Creating a blank canvas (white background)
+  - Drawing vertical and horizontal blocks in different colors
+  - Exporting the generated image into the “results” folder for future processing
+
+4. Edge Detection Implementation
+- Started the pipeline by implementing gradient computation using NumPy.
+- Implemented partial derivative approximations (finite differences) as described in Equation 2.2 of the book.
+- Tested gradient magnitude and orientation on the synthetic Blocks World image.
+- Generated first edge map images (saved in local dev environment; will upload final versions to the results folder in Week 4 or Week 5).
+- Compared raw gradients to Sobel-based gradients (OpenCV) to verify correctness; this step was useful for debugging.
+
+5. README.md Abstract (Completed)
+A short but complete abstract was added. It includes:
+- The main problem: recovering 3D world coordinates from a 2D synthetic Blocks World image using a hand-crafted vision pipeline.
+- Approach summary: edge extraction → edge classification → propagation → solving linear equations for X, Y, Z coordinates.
+- Frameworks: Python, NumPy, OpenCV, Matplotlib.
+- References: Chapter 2 of Foundations of Computer Vision and example repos provided in the assignment.
+
+6. Challenges:
+- Deciding whether to manually code every derivative or rely partly on OpenCV required some thought. I chose to manually implement the main derivative operators (as the assignment expects understanding of the math), while using OpenCV only for verification.
+- Aligning the synthetic Blocks World scene exactly with the orthographic projection assumptions required adjusting object proportions and positions.
+
+7. Communication:
+- Continued updating the repository regularly with commits.
+- Organized code into small functions to make later integration easier.
+
+Next Steps for Week 3:
+- Implement edge classification (object boundaries, contact edges, occlusion edges).
+- Add figure–ground segmentation using thresholding of color/saturation (as described in Chapter 2).
+- Start implementing linear constraints for vertical and horizontal edges.
+- Add first intermediate result images into the “results/” folder.
+- Expand README with pipeline diagrams or visual explanations.
+
+Prepared by:
+Manasa Maram
+Date: November 16, 2025
