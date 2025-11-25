@@ -28,20 +28,20 @@ The results folder contains processed images for each pipeline step, useful for 
 
 
 
-# Blocks World Vision Project
+# #Simple World Implementationn
 
 ## Overview
 
-This project implements a basic vision pipeline to preprocess and analyze images from a simple Blocks World. It performs grayscale conversion, blurring, edge detection, and line classification for multiple images. All steps are automated and results for each image are saved and visualized.
+This project implements a basic vision pipeline to preprocess and analyze images from a simple World. It performs grayscale conversion, blurring, edge detection, and line classification for multiple images. All steps are automated and results for each image are saved and visualized.
 
 
 ## Folder Structure
 
 ```
-blocks-world-vision/
+#Simple World-vision/
 │
 ├── code/
-│   └── blocks_world_processing.py
+│   └── #Simple World Implementationn.py
 ├── data/
 │   └── (place all input images here)
 ├── results/
@@ -77,10 +77,10 @@ conda install numpy=1.24 matplotlib opencv
 
 ## How to Run
 
-1. Place your images in the `data/` folder and update the `image_filenames` list in `blocks_world_processing.py` with the correct file paths.
+1. Place your images in the `data/` folder and update the `image_filenames` list in `#Simple_World_Implementationn.py` with the correct file paths.
 2. Run the script:
    ```
-   python code/blocks_world_processing.py
+   python code/#Simple_World_Implementationn.py
    ```
    Or, open it in Jupyter Lab to step through and see the outputs interactively.
 
@@ -107,7 +107,7 @@ Example: For an image named `image3.gif`, results will appear as:
 
 ## Project Structure Commentary
 
-- `code/blocks_world_processing.py`: main script with all processing steps, fully commented.
+- `code/#Simple_World_Implementationn.py`: main script with all processing steps, fully commented.
 - `data/`: user-provided block world images.
 - `results/`: automatically generated, organized outputs for documentation and review.
 
