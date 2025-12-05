@@ -1,0 +1,11 @@
+Week 4 Log
+
+Finalized the multi-image processing pipeline (grayscale, blur, edges, and line detection) for all Simple World images.
+
+Cleaned and reorganized the repository structure (code/, data/, results/, README, requirements.txt).
+
+Completed detailed documentation and comments in the main script and updated the README with installation and execution steps.
+
+Prepared the outline and setup for the video demo, including showing the repo structure and running the pipeline.
+
+
