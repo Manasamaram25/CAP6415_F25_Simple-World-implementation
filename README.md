@@ -215,12 +215,6 @@ These outputs are intended for analysis, reports, and the final presentation vid
 
 ---
 
-## License
-
-This project is intended for educational use. If you publish the repository publicly, you may add a license such as the MIT License and include a `LICENSE` file.
-
----
-
 ## Author
 
 Manasa Maram  
