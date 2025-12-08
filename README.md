@@ -1,119 +1,227 @@
-# Simple World Implementation
-
-## Abstract
-This project implements a basic vision system for the Blocks World scene. The main goal is to process input images of colored blocks, detect edges, and lay the foundation for 3D scene reconstruction—all using classical computer vision algorithms.
-
-## Framework
-- Language: Python  
-- Libraries: OpenCV, NumPy, Matplotlib
-
-## Code
-- All code for preprocessing and edge detection is contained in the repository.
-- Input images are analyzed step by step from grayscale conversion to edge detection.
-
-## Attribution
-- Based on techniques in “Foundations of Computer Vision” by Torralba, Isola, Freeman.
-- Uses OpenCV (https://opencv.org/) and NumPy (https://numpy.org/) for processing.
-
-## How to Run
-1. Clone the repository.
-2. Place your input images in the data folder.
-3. Run the Python scripts in the code folder.
-4. Results are saved to the results folder.
-
-
-
-## Results
-The results folder contains processed images for each pipeline step, useful for analysis and reporting.
-
-
-
-# #Simple World Implementationn
+# Simple World Implementation – Computer Vision Project
 
 ## Overview
 
-This project implements a basic vision pipeline to preprocess and analyze images from a simple World. It performs grayscale conversion, blurring, edge detection, and line classification for multiple images. All steps are automated and results for each image are saved and visualized.
+This project implements a classical computer vision pipeline for a Simple World of stacked blocks. The goal is to start from 2D images of a block‑world scene and extract useful structure: edges, lines, figure/ground separation, and a simple 3D world coordinate representation.
 
+The pipeline uses traditional image processing techniques with OpenCV, NumPy, and Matplotlib. It is designed as a step‑by‑step implementation of concepts from introductory computer vision, without any machine learning.
 
-## Folder Structure
+## Features
+
+- Load and preprocess multiple Simple World images.
+- Convert images to grayscale and apply Gaussian blur.
+- Detect edges with the Canny edge detector.
+- Detect and classify straight line segments (vertical vs horizontal) using the probabilistic Hough transform.
+- Perform simple figure/ground separation using thresholding and morphology.
+- Construct X, Y, Z world coordinate maps over the image.
+- Visualize a basic 3D surface reconstruction from these coordinates.
+- Save all intermediate and final results for each image into a `results` directory.
+
+## Project Structure
 
 ```
-#Simple World-vision/
+simple-world-implementation/
 │
-├── code/
-│   └── #Simple World Implementationn.py
-├── data/
-│   └── (place all input images here)
-├── results/
-│   └── (outputs for each processed image)
-├── requirements.txt
+├── CV_Final_Project_Manasa_Maram-Final.ipynb   # Main project notebook
+├── data/                                      # Input images (Simple World scenes)
+│   ├── image1.png
+│   ├── image2.png
+│   └── ...
+├── results/                                   # Auto-generated outputs (created at runtime)
+│   ├── image1_gray.png
+│   ├── image1_edges.png
+│   ├── image1_lines.png
+│   ├── image1_figure_mask.png
+│   ├── image1_world_coordinates.png
+│   └── ...
+├── requirements.txt                           # Python dependencies
 └── README.md
 ```
 
+The notebook reads from `data/` and writes its outputs to `results/`.
 
+---
 
 ## Dependencies
 
-- Python 3.10 or compatible
-- numpy==1.24.4
-- matplotlib==3.7.1
-- opencv-python==4.12.0
+The project requires Python 3.10+ and the following libraries:
 
-Install dependencies using pip:
+- `numpy`
+- `opencv-python`
+- `matplotlib`
+- `jupyter` (for running the notebook)
+
+Example `requirements.txt`:
+
+```
+numpy==1.24.4
+opencv-python==4.10.0.84
+matplotlib==3.7.1
+jupyter==1.0.0
+```
+
+You may adjust versions to match your environment.
+
+---
+
+## Installation
+
+1. Clone or download the repository
+
+```
+git clone https://github.com/<your-username>/simple-world-implementation.git
+cd simple-world-implementation
+```
+
+2. Create and activate a virtual environment (recommended)
+
+Using Conda:
+
+```
+conda create -n simpleworld python=3.10
+conda activate simpleworld
+```
+
+Or using `venv`:
+
+```
+python -m venv venv
+source venv/bin/activate        # Linux / macOS
+venv\Scripts\activate           # Windows
+```
+
+3. Install dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
-Or, recommended with conda:
+---
+
+## Data
+
+Place your Simple World images (PNG, JPG, GIF, etc.) into the `data/` folder, for example:
 
 ```
-conda create -n visionenv python=3.10
-conda activate visionenv
-conda install numpy=1.24 matplotlib opencv
+data/
+├── simple_world_1.png
+├── simple_world_2.png
+└── simple_world_3.png
 ```
 
+In the notebook, set the list of image filenames:
 
+```
+image_filenames = [
+    "data/simple_world_1.png",
+    "data/simple_world_2.png",
+    "data/simple_world_3.png",
+]
+```
+
+Update this list if you add or remove images.
+
+---
 
 ## How to Run
 
-1. Place your images in the `data/` folder and update the `image_filenames` list in `#Simple_World_Implementationn.py` with the correct file paths.
-2. Run the script:
-   ```
-   python code/#Simple_World_Implementationn.py
-   ```
-   Or, open it in Jupyter Lab to step through and see the outputs interactively.
+### Option 1 – Run the notebook (recommended)
 
-3. Generated results will be saved in the `results/` folder.  
-   - Each output (`original`, `gray`, `blurred`, `edges`, `lines`) is named for its corresponding input image.
+1. Start Jupyter:
 
+```
+jupyter notebook
+```
 
-## Example Outputs
+2. Open `CV_Final_Project_Manasa_Maram-Final.ipynb`.
 
-Example: For an image named `image3.gif`, results will appear as:
-- `results/image3_original.png`
-- `results/image3_gray.png`
-- `results/image3_blurred.png`
-- `results/image3_edges.png`
-- `results/image3_lines.png`
+3. Run all cells from top to bottom (`Kernel → Restart & Run All`), or step through interactively.
 
+The notebook will process each image, show intermediate figures inline, and save all outputs into the `results/` folder.
 
-## Features
+### Option 2 – Run as a Python script
 
-- Batch processing of any number of images.
-- Well-visualized results after each processing step.
-- Clear code documentation and separation of files.
+If you export the main loop to a script (for example `blocks_world_processing.py`), you can run:
 
+```
+python blocks_world_processing.py
+```
 
-## Project Structure Commentary
+This will generate the same outputs in `results/` without interactive visualization.
 
-- `code/#Simple_World_Implementationn.py`: main script with all processing steps, fully commented.
-- `data/`: user-provided block world images.
-- `results/`: automatically generated, organized outputs for documentation and review.
+---
 
+## Processing Pipeline
 
-## Troubleshooting
+For each image, the following steps are applied:
 
-- If your environment gives numpy errors, create a fresh conda environment as shown above.
-- Be sure file paths match your operating system (Windows uses `\\`, Linux/Mac uses `/`).
+1. Load and preprocess
+   - Read the color image from disk.
+   - Convert to grayscale.
+   - Apply Gaussian blur to reduce noise.
 
+2. Edge detection
+   - Run the Canny edge detector on the blurred grayscale image to obtain a binary edge map.
+
+3. Line detection and classification
+   - Use the probabilistic Hough transform to detect straight line segments.
+   - Compute the orientation of each line.
+   - Color vertical lines (angles near 90°) in green and horizontal lines (angles near 0° or 180°) in red.
+   - Overlay these lines on the original image.
+
+4. Figure / ground separation
+   - Apply a global intensity threshold to segment figure (blocks) from background.
+   - Clean the result with morphological opening and closing.
+   - Use the binary mask to generate a “figure only” image containing just the blocks.
+
+5. World coordinate maps
+   - Let the image size be \(h \times w\).
+   - Construct:
+     - X world coordinate: values increase from left to right.
+     - Y world coordinate: values increase from top to bottom.
+     - Z world coordinate: set to a constant plane (flat depth) in this basic implementation.
+   - Visualize X, Y, and Z as grayscale/colormapped images.
+
+6. 3D surface reconstruction
+   - Interpret X, Y, Z as a grid and plot a 3D surface.
+   - With constant Z, this appears as a flat plane; in extended versions different depths can be assigned per block.
+
+---
+
+## Outputs
+
+For each input image `name.ext`, typical outputs include:
+
+- `results/name_original.png` – original color image.
+- `results/name_gray.png` – grayscale image.
+- `results/name_blurred.png` – blurred grayscale image.
+- `results/name_edges.png` – edge map (Canny).
+- `results/name_lines.png` – edge classification overlay (green vertical / red horizontal).
+- `results/name_figure_mask.png` – binary figure/ground mask.
+- `results/name_figure_only.png` – original image with only the figure visible.
+- `results/name_world_coordinates.png` – multi-panel visualization of X, Y, Z (if saved).
+- `results/name_3d_surface.png` – 3D surface reconstruction (if saved).
+
+These outputs are intended for analysis, reports, and the final presentation video.
+
+---
+
+## Limitations and Future Work
+
+- Depth model: The current Z map is flat. Future work could assign different depth values to different blocks and produce a stepped 3D reconstruction.
+- **Segmentation robustness:** Figure/ground is based on a simple global threshold. Using adaptive thresholds or color clustering would improve robustness to lighting changes.
+- Geometry: Only vertical and horizontal lines are distinguished. Extending the analysis to diagonal edges and junction types would provide a richer structural description.
+- Camera model: The mapping from image to world coordinates assumes an orthographic model. Estimating camera parameters could enable a more realistic projection.
+
+---
+
+## License
+
+This project is intended for educational use. If you publish the repository publicly, you may add a license such as the MIT License and include a `LICENSE` file.
+
+---
+
+## Author
+
+Manasa Maram  
+Simple World Implementation – Computer Vision Final Project
