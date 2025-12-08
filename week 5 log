@@ -1,0 +1,13 @@
+Week 5 Log – Simple World Implementation
+
+Finalized the full pipeline for all images, including edge detection, line classification, figure–ground separation, and world coordinate mapping.
+
+Cleaned and commented the code, and tested it end‑to‑end in the final notebook to ensure error‑free execution.
+
+Prepared the README, weekly logs, and clarified the project structure for uploading to Git.
+
+Planned and rehearsed the video demo: repository walk‑through, live notebook run, and explanation of the main results and limitations.
+
+Next:
+
+Record and edit the final project video, then submit the Git repository link and video according to course instructions.
