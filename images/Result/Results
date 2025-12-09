@@ -1,1 +1,171 @@
 
+Simple World Implementation – Main Script
+
+This script:
+- Loads multiple Simple World images
+- Preprocesses them (grayscale + blur)
+- Detects edges and classifies vertical/horizontal lines
+- Performs simple figure/ground separation
+- Builds X, Y, Z world coordinate maps
+- Visualizes a 3D surface
+- Saves all outputs into the 'results' folder
+"""
+
+import os
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D  # needed for 3D plots
+
+
+# ------------------------------------------------------------
+# 1. EDIT THIS LIST: paths to all Simple World input images
+# ------------------------------------------------------------
+image_filenames = [
+    r"data/simple_world_1.png",
+    r"data/simple_world_2.png",
+    # add more images here...
+]
+
+# Create results folder if it does not exist
+os.makedirs("results", exist_ok=True)
+
+
+# ------------------------------------------------------------
+# 2. Main processing loop – full pipeline for each image
+# ------------------------------------------------------------
+for image_filename in image_filenames:
+
+    # ---------- load image ----------
+    basename = os.path.splitext(os.path.basename(image_filename))[0]
+    img = cv2.imread(image_filename)
+    if img is None:
+        print(f"[WARN] Could not read {image_filename}")
+        continue
+
+    # ---------- preprocessing: gray + blur ----------
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    # ---------- edge detection + line classification ----------
+    edges = cv2.Canny(blurred, 50, 150)
+
+    img_lines = img.copy()
+    lines = cv2.HoughLinesP(
+        edges,
+        rho=1,
+        theta=np.pi / 180,
+        threshold=50,
+        minLineLength=40,
+        maxLineGap=5
+    )
+    if lines is not None:
+        for line in lines:
+            x1, y1, x2, y2 = line[0]
+            angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+
+            # Vertical lines (≈90°) → green
+            if 80 <= abs(angle) <= 100:
+                cv2.line(img_lines, (x1, y1), (x2, y2), (0, 255, 0), 3)
+
+            # Horizontal lines (≈0° or 180°) → red
+            elif abs(angle) <= 10 or abs(angle) >= 170:
+                cv2.line(img_lines, (x1, y1), (x2, y2), (0, 0, 255), 3)
+
+    # ---------- figure / ground separation ----------
+    thresh_val = 200  # adjust if necessary for your images
+    _, fg_mask = cv2.threshold(blurred, thresh_val, 255, cv2.THRESH_BINARY)
+
+    kernel = np.ones((3, 3), np.uint8)
+    fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_OPEN, kernel, iterations=1)
+    fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_CLOSE, kernel, iterations=1)
+
+    figure_only = cv2.bitwise_and(img, img, mask=fg_mask)
+
+    # ---------- world coordinate maps ----------
+    h, w = gray.shape
+    X = np.tile(np.arange(w, dtype=np.float32), (h, 1))         # X increases left→right
+    Y = np.tile(np.arange(h, dtype=np.float32).reshape(h, 1),   # Y increases top→bottom
+                (1, w))
+    Z = np.zeros_like(X, dtype=np.float32)                      # flat depth
+
+    # ---------- save all important outputs ----------
+    cv2.imwrite(f"results/{basename}_original.png", img)
+    cv2.imwrite(f"results/{basename}_gray.png", gray)
+    cv2.imwrite(f"results/{basename}_blurred.png", blurred)
+    cv2.imwrite(f"results/{basename}_edges.png", edges)
+    cv2.imwrite(f"results/{basename}_lines.png", img_lines)
+    cv2.imwrite(f"results/{basename}_figure_mask.png", fg_mask)
+    cv2.imwrite(f"results/{basename}_figure_only.png", figure_only)
+
+    # Small helper to save Matplotlib figures
+    def save_fig(fig, path):
+        fig.savefig(path, dpi=300, bbox_inches="tight")
+        plt.close(fig)
+
+    # ---------- visualization: original / gray / blurred ----------
+    fig1 = plt.figure(figsize=(15, 5))
+    plt.subplot(1, 3, 1); plt.title("Original");   plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)); plt.axis("off")
+    plt.subplot(1, 3, 2); plt.title("Grayscale");  plt.imshow(gray, cmap="gray");                     plt.axis("off")
+    plt.subplot(1, 3, 3); plt.title("Blurred");    plt.imshow(blurred, cmap="gray");                  plt.axis("off")
+    fig1.suptitle(basename)
+    save_fig(fig1, f"results/{basename}_preprocessing.png")
+
+    # ---------- visualization: figure / ground ----------
+    fig2 = plt.figure(figsize=(8, 4))
+    plt.subplot(1, 2, 1); plt.title("Figure Mask"); plt.imshow(fg_mask, cmap="gray");                          plt.axis("off")
+    plt.subplot(1, 2, 2); plt.title("Figure Only"); plt.imshow(cv2.cvtColor(figure_only, cv2.COLOR_BGR2RGB));  plt.axis("off")
+    fig2.suptitle(f"{basename} - Figure / Ground")
+    save_fig(fig2, f"results/{basename}_figure_ground.png")
+
+    # ---------- big 2×3 figure: image, edges, lines, X/Y/Z ----------
+    fig3 = plt.figure(figsize=(12, 10))
+
+    ax1 = fig3.add_subplot(2, 3, 1)
+    ax1.set_title("Original Image")
+    ax1.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    ax1.axis("off")
+
+    ax2 = fig3.add_subplot(2, 3, 2)
+    ax2.set_title("Detected Edges")
+    ax2.imshow(edges, cmap="gray")
+    ax2.axis("off")
+
+    ax3 = fig3.add_subplot(2, 3, 3)
+    ax3.set_title("Edge Classification\n(Green=Vertical, Red=Horizontal)")
+    ax3.imshow(cv2.cvtColor(img_lines, cv2.COLOR_BGR2RGB))
+    ax3.axis("off")
+
+    ax4 = fig3.add_subplot(2, 3, 4)
+    im4 = ax4.imshow(X, cmap="gray")
+    ax4.set_title("X World Coordinate")
+    ax4.axis("off")
+    fig3.colorbar(im4, ax=ax4, fraction=0.046, pad=0.04)
+
+    ax5 = fig3.add_subplot(2, 3, 5)
+    im5 = ax5.imshow(Y, cmap="gray")
+    ax5.set_title("Y World Coordinate")
+    ax5.axis("off")
+    fig3.colorbar(im5, ax=ax5, fraction=0.046, pad=0.04)
+
+    ax6 = fig3.add_subplot(2, 3, 6)
+    im6 = ax6.imshow(Z, cmap="jet", vmin=-0.1, vmax=0.1)
+    ax6.set_title("Z World Coordinate (Depth)\nBlue=Near, Red=Far")
+    ax6.axis("off")
+    fig3.colorbar(im6, ax=ax6, fraction=0.046, pad=0.04)
+
+    plt.tight_layout()
+    save_fig(fig3, f"results/{basename}_world_coordinates.png")
+
+    # ---------- 3D surface reconstruction ----------
+    fig4 = plt.figure(figsize=(5, 4))
+    ax3d = fig4.add_subplot(1, 1, 1, projection="3d")
+    ax3d.plot_surface(X, Y, Z, cmap="plasma", edgecolor="none")
+    ax3d.set_title("3D Surface Reconstruction")
+    ax3d.set_xlabel("X")
+    ax3d.set_ylabel("Y")
+    ax3d.set_zlabel("Z (Depth)")
+    plt.tight_layout()
+    save_fig(fig4, f"results/{basename}_3d_surface.png")
+
+    print(f"[OK] Processed {basename}")
